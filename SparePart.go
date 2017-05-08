@@ -141,7 +141,7 @@ func (t *SimpleChaincode) add_ecert(stub shim.ChaincodeStubInterface, name strin
 func (t *SimpleChaincode) get_username(stub shim.ChaincodeStubInterface) (string, error) {
 
     username, err := stub.ReadCertAttribute("username");
-	fmt.Println("USERNAME get_username: " + username)    
+	fmt.Println("USERNAME get_username: %s" + string(username) )   
 	if err != nil { return "", errors.New("Couldn't get attribute 'username'. Error: " + err.Error()) }
 	return string(username), nil
 }
@@ -154,7 +154,7 @@ func (t *SimpleChaincode) get_username(stub shim.ChaincodeStubInterface) (string
 func (t *SimpleChaincode) check_affiliation(stub shim.ChaincodeStubInterface) (string, error) {
     affiliation, err := stub.ReadCertAttribute("role");
 	//logger.Debug("role: ", affiliation)
-	fmt.Println("ROLE check_affiliation: " + affiliation)
+	fmt.Println("ROLE check_affiliation: %s" + string(affiliation))
 	if err != nil { return "", errors.New("Couldn't get attribute 'role'. Error: " + err.Error()) }
 	return string(affiliation), nil
 
@@ -229,7 +229,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 
 	caller, caller_affiliation, err := t.get_caller_data(stub)
 
-	//if err != nil { return nil, errors.New("Error retrieving caller information")}
+	if err != nil { return nil, errors.New("Error retrieving caller information")}
 
 
 	if function == "create_part" {
@@ -278,7 +278,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 
 	caller, caller_affiliation, err := t.get_caller_data(stub)
-	//if err != nil { fmt.Printf("QUERY: Error retrieving caller details", err); return nil, errors.New("QUERY: Error retrieving caller details: "+err.Error()) }
+	if err != nil { fmt.Printf("QUERY: Error retrieving caller details", err); return nil, errors.New("QUERY: Error retrieving caller details: "+err.Error()) }
 
     logger.Debug("function: ", function)
     logger.Debug("caller: ", caller)
