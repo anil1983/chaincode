@@ -98,8 +98,8 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 		t.add_ecert(stub, args[i], args[i+1])
 	}
 	
-	_, err := t.retrieve_part(stub, 'AB1234567')
-	if err == nil {
+	_, err2 := t.retrieve_part(stub, "AB1234567")
+	if err2 == nil {
 		return []byte("false"), errors.New("PartID is not unique")
 	} else {
 		return []byte("true"), nil
@@ -161,7 +161,7 @@ func (t *SimpleChaincode) get_username(stub shim.ChaincodeStubInterface) (string
 func (t *SimpleChaincode) check_affiliation(stub shim.ChaincodeStubInterface) (string, error) {
     affiliation, err := stub.ReadCertAttribute("role");
 	//logger.Debug("role: ", affiliation)
-	fmt.Println("ROLE check_affiliation: %s" + affiliation)
+	fmt.Println("ROLE check_affiliation: %s" + string(affiliation))
 	if err != nil { return "", errors.New("Couldn't get attribute 'role'. Error: " + err.Error()) }
 	return string(affiliation), nil
 
@@ -200,8 +200,9 @@ func (t *SimpleChaincode) retrieve_part(stub shim.ChaincodeStubInterface, partID
 
 	bytes, err := stub.GetState(partID);
 	
-	fmt.Println("RETRIEVE_PART: Bytes on GetState: " + bytes);
-	fmt.Println("RETRIEVE_PART: Bytes on GetState string :" + string(bytes));
+	
+	fmt.Println(bytes ) 
+	fmt.Println("retrieve_part : string partID :" + string(bytes) ) 
 
 	if err != nil {	fmt.Printf("RETRIEVE_PART: Failed to invoke sparepart_code: %s", err); return sp, errors.New("RETRIEVE_PART: Error retrieving spare part with PartID = " + partID) }
 
